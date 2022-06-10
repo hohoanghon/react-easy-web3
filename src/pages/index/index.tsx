@@ -5,7 +5,7 @@ import { ConnectState, useEasyWeb3 } from '@/service/web3'
 import { ethers } from 'ethers'
 import { DAI_CONTRACT } from '@/service/web3/constants/contract-test'
 
-const toAddress = '0x75dbb972072fEB3CAd41f3d7b634b4305A208375'
+const toAddress = '0x1CB0c4a453d73C11716F6448c4EdF23f27E79dab'
 
 const Index = () => {
   const { t } = useTranslation()
@@ -13,8 +13,8 @@ const Index = () => {
   const getContract = () => {
     let erc20_rw: any = null
     if (easyWeb3.isConnected()) {
-      if (walletInfo.chainId == 3) {
-        const dai = DAI_CONTRACT[3]
+      if (walletInfo.chainId == 97) {
+        const dai = DAI_CONTRACT[97]
         erc20_rw = new ethers.Contract(
           dai.address,
           dai.abi,
@@ -61,6 +61,7 @@ const Index = () => {
       title: 'dai.balanceOf()',
       func: async () => {
         const dai = getContract()
+        console.log(dai);
         if (dai) {
           const symbol = await dai.symbol()
           const rowBalance = await dai.balanceOf(walletInfo.address)
@@ -73,9 +74,20 @@ const Index = () => {
       func: async () => {
         const dai = getContract()
         if (dai) {
-          const ret = await dai.transfer(toAddress, 99)
+          const ret = await dai.transfer(toAddress,BigInt(1000000000000000000))
           alert('transfer: ' + JSON.stringify(ret))
         }
+      },
+    },
+    {
+      title: 'dai.approve()',
+      func: async () => {
+        const dai = getContract()
+        // if (dai) {
+        //   const ret = await dai.approve('0x1B57F938d2Eb1C3b31F837618Af2f16CA8Aa4C1d', 1000000000000000000)
+        //   alert('approve: ' + JSON.stringify(ret))
+        // }
+        const ret = await dai.approve('0x1B57F938d2Eb1C3b31F837618Af2f16CA8Aa4C1d',BigInt(1000000000000000000));
       },
     },
   ]
